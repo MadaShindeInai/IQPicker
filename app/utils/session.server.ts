@@ -44,3 +44,14 @@ export const createUserSession = async (userId: string, redirectTo: string) => {
     headers: { "Set-Cookie": await storage.commitSession(session) },
   });
 };
+
+const getUserSession = async (request: Request) => {
+  return await storage.getSession(request.headers.get("Cookie"));
+};
+
+export const getUserId = async (request: Request) => {
+  let session = await getUserSession(request);
+  let userId = session.get("userId");
+  if (typeof userId !== "string") return null;
+  return userId;
+};
